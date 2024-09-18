@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    volumes:
+    # Default Location
+    # /var/lib/docker/volumes/gao-yang_postgres_data/_data:/var/lib/postgresql/data  # Explicitly specifying the default volume location
+      - gao-yang_postgres_data:/var/lib/postgresql/data
+  environment:
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    POSTGRES_USER: ${POSTGRES_USER}
+    POSTGRES_DB: ${POSTGRES_DB}
+    
+volumes:
+  gao-yang_postgres_data:  # Project-specific volume name

@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+
+# Log files
+*.log
+
+# Environment variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# Dependency directories
+jspm_packages/
+
+# IDE/editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# NPM package lock
+package-lock.json
+
+# Kraken Trading History & OHLCVT
+Kraken_Trading_History.zip
+Kraken_OHLCVT.zip

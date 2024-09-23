@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 const app = express();
 import cors from 'cors';
+import { PrismaClient } from '@prisma/client';
 
 console.log('Testing port env', process.env.PORT);
 const port = process.env.PORT || 4000;

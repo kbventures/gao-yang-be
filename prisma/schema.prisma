@@ -14,13 +14,18 @@ datasource db {
 }
 
 model CurrencyPair {
-  id     String   @id @default(uuid()) // Use UUID as the primary key
-  symbol String   @unique // e.g., "XBTCAD"
-  ohlcvt OHLCVT[]
+  id        String       @id @unique // e.g., "XBTCAD"
+  ohlcvt1   OHLCVT1[]
+  ohlcvt5   OHLCVT5[]
+  ohlcvt15  OHLCVT15[]
+  ohlcvt30  OHLCVT60[]
+  ohlcvt60  OHLCVT240[]
+  ohlcvt240 OHLCVT720[]
+  ohlcvt720 OHLCVT1440[]
+  OHLCVT30  OHLCVT30[]
 }
 
-// Open High Low Close Volume Transaction Count
-model OHLCVT {
+model OHLCVT1 {
   id               Int      @id @default(autoincrement())
   timestamp        DateTime @unique
   open             Decimal  @db.Decimal(20, 8)
@@ -28,10 +33,123 @@ model OHLCVT {
   low              Decimal  @db.Decimal(20, 8)
   close            Decimal  @db.Decimal(20, 8)
   volume           Decimal  @db.Decimal(20, 8)
-  transactionCount Int // Number of transactions in the interval
+  transactionCount Int
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String // Change to String to match UUID type
+  currencyPairId String
+  currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+}
+
+// Open High Low Close Volume Transaction Count
+model OHLCVT5 {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime @unique
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPairId String
+  currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+}
+
+model OHLCVT15 {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime @unique
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPairId String
+  currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+}
+
+model OHLCVT30 {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime @unique
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPairId String
+  currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+}
+
+model OHLCVT60 {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime @unique
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPairId String
+  currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+}
+
+model OHLCVT240 {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime @unique
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPairId String
+  currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+}
+
+model OHLCVT720 {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime @unique
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPairId String
+  currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+}
+
+model OHLCVT1440 {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime @unique
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPairId String
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }

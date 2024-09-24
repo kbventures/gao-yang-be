@@ -16,6 +16,8 @@
   "dependencies": {
     "@prisma/client": "^5.19.1",
     "cors": "^2.8.5",
+    "decimal": "^0.0.2",
+    "decimal.js": "^10.4.3",
     "express": "^4.21.0",
     "fast-csv": "^5.0.1",
     "path": "^0.12.7",

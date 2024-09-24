@@ -14,15 +14,15 @@ datasource db {
 }
 
 model CurrencyPair {
-  id        String       @id @unique // e.g., "XBTCAD"
-  ohlcvt1   OHLCVT1[]
-  ohlcvt5   OHLCVT5[]
-  ohlcvt15  OHLCVT15[]
-  ohlcvt30  OHLCVT60[]
-  ohlcvt60  OHLCVT240[]
-  ohlcvt240 OHLCVT720[]
-  ohlcvt720 OHLCVT1440[]
-  OHLCVT30  OHLCVT30[]
+  id         String       @id @unique // e.g., "XBTCAD"
+  ohlcvt1    OHLCVT1[]
+  ohlcvt5    OHLCVT5[]
+  ohlcvt15   OHLCVT15[]
+  ohlcvt30   OHLCVT30[]
+  ohlcvt60   OHLCVT60[]
+  ohlcvt240  OHLCVT240[]
+  ohlcvt720  OHLCVT720[]
+  ohlcvt1440 OHLCVT1440[]
 }
 
 model OHLCVT1 {

@@ -1,73 +1,77 @@
 import fs from 'fs';
 import path from 'path';
 import fastcsv from 'fast-csv';
-import { PrismaClient } from '@prisma/client'; 
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 // Obtain pair name and interval from execution command line
-const newCurrencyPair = process.env.NEWPAIR || "";
-const interval = process.env.INTERVAL || "";
+const newCurrencyPair = process.env.NEWPAIR || '';
+const interval = process.env.INTERVAL || '';
+const directory = process.env.FILE_DIRECTORY || '';
+const fileName = process.env.FILE_NAME || '';
+
+
+// FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
 
 // node
 // NEWPAIR=XBTCAD INTERVAL=1 node csvFsStreamToSql.ts
 
-// Create new pair in Postgresql Database 
-const currencyPair = await prisma.currencyPair.create({
-    data:{
-        id: newCurrencyPair,
-    }
-})
-
+// Create new pair in Postgresql Database
+// const currencyPair = await prisma.currencyPair.create({
+//   data: {
+//     id: newCurrencyPair,
+//   },
+// });
 
 interface CurrencyPair {
-    id: String;
-
+  id: String;
 }
 
-interface TOHLCVTRow {
-    Timestamp: Date;
-    id: Number;
-    open: Number;
-    high: Number;
-    low: Number;
-    close: Number;
-    volume: Number;
-    transactionCount: Number;
+interface OHLCVTRow {
+  Timestamp: Date;
+  id: Number;
+  open: Number;
+  high: Number;
+  low: Number;
+  close: Number;
+  volume: Number;
+  transactionCount: Number;
 }
 
+// import CurrencyPair from '../models/CurrenyPair';
+// import OHLCVT from '../models/OHLCVT';
 
+interface ohlcvtCsvRow {
+  timestamp: Date;
+  open: Number;
+  high: Number;
+  low: Number;
+  Close: Number;
+  Volume: Number;
+  TransactionCount: Number;
+}
 
-// const oneMinIntervals = '../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1.csv'
-const testfile = '../../historical-data/Kraken_OHLCVT/XBTCAD/test.csv'
-let streamReader = fs.createReadStream(testfile)
-    .pipe(fastcsv.parse({headers:false}))
+// const csvLocation = path.join(__dirname, '../../historical-data/Kraken_OHLCVT/',newCurrencyPair, fileName)
+const csvLocation = path.join(
+  directory,
+  newCurrencyPair,
+  fileName
+);
+console.log(csvLocation)
 
-streamReader.on('data', function (chunk) {
-    console.log(chunk.toString());
-});
-
-
-
-
-
-// Process chunk
-
-// Handle end of stream
-streamReader.on('end', async () => {
-    // Check to see if chunk is empty and handle if not empty
-
-    await prisma.$disconnect();
-});
-
-
-
-// Handle Stream Errors
-streamReader.on('error', (err)=>{
-    console.error('Error reading the file:', err)
-    prisma.$disconnect();
-})
-
+fs.createReadStream(csvLocation)
+  .pipe(fastcsv.parse({ headers: false }))
+  .on('error', (error) => console.error(error))
+  .on('data', (row) => console.log(row))
+  .transform((row) => {
+    // Transform the row data, for example, change the case of the first name
+    return {
+      ...row,
+      firstName: row.firstName.toUpperCase(), // Example transformation
+    };
+  })
+  .on('end', (rowCount: any) => console.log(`Parsed ${rowCount} rows`));
 
 
 // 1 000 000 OHLCVT 1 Minute candles
@@ -93,15 +97,14 @@ streamReader.on('error', (err)=>{
 // 1436518680,350.2,350.2,350.2,350.2,0.18939167,1
 // 1436671620,375.0,375.0,375.0,375.0,0.0399,1
 
-
 // We want to add them sql in 1000 1 min candle chunks
 
-// We stream to the file and add 1000 to memory and them to Postgresl using Prisma 
+// We stream to the file and add 1000 to memory and them to Postgresl using Prisma
 
 // We close tidy up stream
 
 // Initial version will do one file and interval at a time
 
-// Service created to keep the file up to date in real time. 
+// Service created to keep the file up to date in real time.
 
 // Final version will process all teh files and extract currency pair and interval form file name

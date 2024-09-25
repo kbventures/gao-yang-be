@@ -93,46 +93,13 @@
 
 
 
-// const transformStream = new Transform({
-//     objectMode: true,
-//     async transform(row, encoding, callback) {
-//       const data = {
-//         // Assuming the CSV columns correspond to these properties
-//         timestamp: new Date(row[0]),
-//         open: parseFloat(row[1]),
-//         high: parseFloat(row[2]),
-//         low: parseFloat(row[3]),
-//         close: parseFloat(row[4]),
-//         volume: parseFloat(row[5]),
-//         transactionCount: parseInt(row[6], 10),
-//       };
-  
-//       try {
-//         await prisma.ohlcvt.create({ data });
-//         callback(null, data);
-//       } catch (error) {
-//         callback(error);
-//       }
-//     }
-//   });
-  
-//   fs.createReadStream(csvLocation)
-//     .pipe(fastcsv.parse({ headers: false }))
-//     .pipe(transformStream)
-//     .on('error', (error) => console.error(error))
-//     .on('end', () => {
-//       console.log('Data processed and inserted');
-//       prisma.$disconnect(); // Disconnect Prisma client
-//     });
-
-
 
 import path from 'path';
-import Decimal from "decimal.js"
 import fs from 'fs';
 import * as fastcsv from 'fast-csv';
-import transfStream from './transformStream';
+import myTransformStream from './transformStream';
 import { PrismaClient } from '@prisma/client';
+import { OHLCVT1 } from '../models/OHLCVT';
 
 const prisma = new PrismaClient();
 
@@ -142,21 +109,36 @@ const newCurrencyPair = process.env.NEWPAIR || '';
 const interval = process.env.INTERVAL || '';
 const directory = process.env.FILE_DIRECTORY || '';
 const fileName = process.env.FILE_NAME || '';
+const chunkMax = process.env.CHUNK_MAX || '';
+
+const currentChunks: OHLCVT1[]  = [];
+const currentChunkCount: number = 0; 
 
 // // FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
 
 
 const csvLocation = path.join(
-  directory,
+  directory || __dirname,
   newCurrencyPair,
   fileName
 );
 
 fs.createReadStream(csvLocation)
   .pipe(fastcsv.parse({ headers: false }))
-  .pipe(transfStream)
+  .pipe(myTransformStream(currentChunks,currentChunkCount))
   .on('error', (error) => console.error(error))
   .on('end', () => {
     console.log('Data processed and inserted');
-    prisma.$disconnect(); // Disconnect Prisma client
   });
+
+
+
+  prisma.$disconnect(); // Disconnect Prisma client
+
+
+
+  // Todo Prisma Disconect Location?
+  // Add entries to Postgresql and make sure it works
+  // Add in chunks
+  // Error handling
+  // Automated Testing

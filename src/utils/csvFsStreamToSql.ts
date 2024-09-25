@@ -1,60 +1,50 @@
+import path from 'path';
+import fs from 'fs';
+import * as fastcsv from 'fast-csv';
+import myTransformStream  from './transformStream.js';
+// import { PrismaClient } from '@prisma/client';
+import { OHLCVT } from '../types/index';
+
+// const prisma = new PrismaClient();
+
+// // Obtain pair name and interval from execution command line
+const newCurrencyPair = process.env.NEWPAIR || '';
+const interval = process.env.INTERVAL || '';
+const directory = process.env.FILE_DIRECTORY || '';
+const fileName = process.env.FILE_NAME || '';
+const chunkMax = process.env.CHUNK_MAX || '';
 
 
-// // Create new pair in Postgresql Database
-// // const currencyPair = await prisma.currencyPair.create({
-// //   data: {
-// //     id: newCurrencyPair,
-// //   },
-// // });
+interface ChunkCount {
+  count: number
+}
 
-// interface CurrencyPair {
-//   id: string;
-// }
+const currentChunks: OHLCVT[] = [];
+const currentChunkCount: ChunkCount = { count: 0 };
 
-// interface OHLCVTRow {
-//   Timestamp: Date;
-//   id: number;
-//   open: number;
-//   high: number;
-//   low: number;
-//   close: number;
-//   volume: number;
-//   transactionCount: number;
-// }
+// // FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
 
-// // import CurrencyPair from '../models/CurrenyPair';
-// // import OHLCVT from '../models/OHLCVT';
+const csvLocation = path.join(
+  directory || __dirname,
+  newCurrencyPair,
+  fileName
+);
 
-// interface ohlcvtCsvRow {
-//   timestamp: Date;
-//   open: Number;
-//   high: Number;
-//   low: Number;
-//   Close: Number;
-//   Volume: Number;
-//   TransactionCount: Number;
-// }
+fs.createReadStream(csvLocation)
+  .pipe(fastcsv.parse({ headers: false }))
+  .pipe(myTransformStream(currentChunks, currentChunkCount))
+  .on('error', (error) => console.error(error))
+  .on('end', () => {
+    console.log('Data processed and inserted');
+  });
 
-// // fs.createReadStream(csvLocation)
-// //   .pipe(fastcsv.parse({ headers: false }))
-// //   .on('error', (error) => console.error(error))
-// // //   .on('data', (row) => console.log(row))
-// //   .transform((row:string[]) => {
+// prisma.$disconnect(); // Disconnect Prisma client
 
-// //     console.log(row[0],row[1],row[2],row[3],row[4])
-// //     let timestamp = new Date(row[0])
-// //     return {
-// //         timestamp,
-// //         open: new Decimal(row[1]),
-// //         high: new Decimal(row[2]),
-// //         low: new Decimal(row[3]),
-// //         close: new Decimal(row[4]),
-// //         volume: new Decimal(row[5]),
-// //         transactionCount: new Decimal(row[6]),
-// //     }
-// //   })
-// //   .on('end', (rowCount: any) => console.log(`Parsed ${rowCount} rows`));
-
+// Todo Prisma Disconect Location?
+// Add entries to Postgresql and make sure it works
+// Add in chunks
+// Error handling
+// Automated Testing
 
 // // 1 000 000 OHLCVT 1 Minute candles
 // // Unix Time Stamp, O, H, L, C, V, T
@@ -78,67 +68,3 @@
 // // 1436518500,350.2,350.2,350.2,350.2,0.0854,1
 // // 1436518680,350.2,350.2,350.2,350.2,0.18939167,1
 // // 1436671620,375.0,375.0,375.0,375.0,0.0399,1
-
-// // We want to add them sql in 1000 1 min candle chunks
-
-// // We stream to the file and add 1000 to memory and them to Postgresl using Prisma
-
-// // We close tidy up stream
-
-// // Initial version will do one file and interval at a time
-
-// // Service created to keep the file up to date in real time.
-
-// // Final version will process all teh files and extract currency pair and interval form file name
-
-
-
-
-import path from 'path';
-import fs from 'fs';
-import * as fastcsv from 'fast-csv';
-import myTransformStream from './transformStream';
-import { PrismaClient } from '@prisma/client';
-import { OHLCVT1 } from '../models/OHLCVT';
-
-const prisma = new PrismaClient();
-
-
-// // Obtain pair name and interval from execution command line
-const newCurrencyPair = process.env.NEWPAIR || '';
-const interval = process.env.INTERVAL || '';
-const directory = process.env.FILE_DIRECTORY || '';
-const fileName = process.env.FILE_NAME || '';
-const chunkMax = process.env.CHUNK_MAX || '';
-
-const currentChunks: OHLCVT1[]  = [];
-const currentChunkCount: number = 0; 
-
-// // FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
-
-
-const csvLocation = path.join(
-  directory || __dirname,
-  newCurrencyPair,
-  fileName
-);
-
-fs.createReadStream(csvLocation)
-  .pipe(fastcsv.parse({ headers: false }))
-  .pipe(myTransformStream(currentChunks,currentChunkCount))
-  .on('error', (error) => console.error(error))
-  .on('end', () => {
-    console.log('Data processed and inserted');
-  });
-
-
-
-  prisma.$disconnect(); // Disconnect Prisma client
-
-
-
-  // Todo Prisma Disconect Location?
-  // Add entries to Postgresql and make sure it works
-  // Add in chunks
-  // Error handling
-  // Automated Testing

@@ -5,6 +5,7 @@ import myTransformStream  from './transformStream.js';
 // import { PrismaClient } from '@prisma/client';
 import { OHLCVT } from '../types/index';
 
+
 // const prisma = new PrismaClient();
 
 // // Obtain pair name and interval from execution command line
@@ -22,6 +23,12 @@ interface ChunkCount {
 const currentChunks: OHLCVT[] = [];
 const currentChunkCount: ChunkCount = { count: 0 };
 
+const updateGlobalVariables = (data: OHLCVT)=>{
+  currentChunks.push(data);
+  currentChunkCount.count++;
+  // console.log("currentChunks, currentChunkCount", currentChunks, currentChunkCount)
+}
+
 // // FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
 
 const csvLocation = path.join(
@@ -30,12 +37,14 @@ const csvLocation = path.join(
   fileName
 );
 
+
 fs.createReadStream(csvLocation)
   .pipe(fastcsv.parse({ headers: false }))
-  .pipe(myTransformStream(currentChunks, currentChunkCount))
+  .pipe(myTransformStream(updateGlobalVariables))
   .on('error', (error) => console.error(error))
   .on('end', () => {
     console.log('Data processed and inserted');
+    console.log("currentCunks", currentChunks)
   });
 
 // prisma.$disconnect(); // Disconnect Prisma client

@@ -1,20 +1,15 @@
 import { Transform } from 'stream';
-import { OHLCVT } from '../types/index';
+import { OHLCVT } from '../types';
 
-interface ChunkCount {
-  count: number
-}
-
-export default function myTransformStream(
-  currentChunks: OHLCVT[],
-  currentChunkCount: ChunkCount
+function myTransformStream(updateGlobalVariables:(data: OHLCVT) => void
 ) {
   const newTransform = new Transform({
     objectMode: true,
     async transform(row, encoding, callback) {
+      console.log(row)
       const data = {
         // Assuming the CSV columns correspond to these properties
-        timestamp: new Date(row[0]),
+        timestamp: new Date(row[0]*1000),
         open: Number(row[1]),
         high: Number(row[2]),
         low: Number(row[3]),
@@ -22,13 +17,15 @@ export default function myTransformStream(
         volume: Number(row[5]),
         transactionCount: Number(row[6]),
       };
-      currentChunks.push(data);
-      currentChunkCount.count;
+      // currentChunks.push(data);
+      // console.log(data)
+      // console.log(currentChunks)
+      // currentChunkCount.count++;
+      updateGlobalVariables(data);
       callback(null, data);
     },
   });
-
   return newTransform;
 }
 
-module.exports = { myTransformStream };
+export default myTransformStream;

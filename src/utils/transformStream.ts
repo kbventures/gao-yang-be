@@ -6,7 +6,6 @@ function myTransformStream(updateGlobalVariables:(data: OHLCVT) => void
   const newTransform = new Transform({
     objectMode: true,
     async transform(row, encoding, callback) {
-      console.log(row)
       const data = {
         // Assuming the CSV columns correspond to these properties
         timestamp: new Date(row[0]*1000),

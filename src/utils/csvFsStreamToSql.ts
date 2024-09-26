@@ -3,10 +3,8 @@ import fs from 'fs';
 import * as fastcsv from 'fast-csv';
 import myTransformStream  from './transformStream.js';
 // import { PrismaClient } from '@prisma/client';
-import { OHLCVT } from '../types/index';
-
-
-// const prisma = new PrismaClient();
+import { OHLCVT, ChunkCount } from '../types/index';
+import { updateGlobalVariables } from './updateGlobalVariables.js';
 
 // // Obtain pair name and interval from execution command line
 const newCurrencyPair = process.env.NEWPAIR || '';
@@ -15,19 +13,8 @@ const directory = process.env.FILE_DIRECTORY || '';
 const fileName = process.env.FILE_NAME || '';
 const chunkMax = process.env.CHUNK_MAX || '';
 
-
-interface ChunkCount {
-  count: number
-}
-
-const currentChunks: OHLCVT[] = [];
-const currentChunkCount: ChunkCount = { count: 0 };
-
-const updateGlobalVariables = (data: OHLCVT)=>{
-  currentChunks.push(data);
-  currentChunkCount.count++;
-  // console.log("currentChunks, currentChunkCount", currentChunks, currentChunkCount)
-}
+let currentChunks: OHLCVT[] = [];
+let currentChunkCount: number =0;
 
 // // FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
 
@@ -40,7 +27,12 @@ const csvLocation = path.join(
 
 fs.createReadStream(csvLocation)
   .pipe(fastcsv.parse({ headers: false }))
-  .pipe(myTransformStream(updateGlobalVariables))
+  .pipe(myTransformStream((data)=>{
+    const updatedState = updateGlobalVariables(data, currentChunks, currentChunkCount);
+    currentChunks = updatedState.chunks; 
+    currentChunkCount = updatedState.count;
+    console.log(currentChunks,currentChunkCount)
+  }))
   .on('error', (error) => console.error(error))
   .on('end', () => {
     console.log('Data processed and inserted');

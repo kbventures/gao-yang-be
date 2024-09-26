@@ -7,8 +7,3 @@ export interface OHLCVT {
   volume: number; // Decimal in PostgreSQL
   transactionCount: number;
 }
-
-export interface ChunkCount {
-  count: number
-}
-

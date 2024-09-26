@@ -14,7 +14,7 @@ datasource db {
 }
 
 model CurrencyPair {
-  id         String       @id @unique // e.g., "XBTCAD"
+  id         String       @id @unique @default(uuid()) // e.g., "XBTCAD"
   ohlcvt1    OHLCVT1[]
   ohlcvt5    OHLCVT5[]
   ohlcvt15   OHLCVT15[]

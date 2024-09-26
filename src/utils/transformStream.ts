@@ -1,14 +1,13 @@
 import { Transform } from 'stream';
 import { OHLCVT } from '../types';
 
-function myTransformStream(updateGlobalVariables:(data: OHLCVT) => void
-) {
+function myTransformStream(updateGlobalVariables: (data: OHLCVT) => void) {
   const newTransform = new Transform({
     objectMode: true,
     async transform(row, encoding, callback) {
       const data = {
         // Assuming the CSV columns correspond to these properties
-        timestamp: new Date(row[0]*1000),
+        timestamp: new Date(row[0] * 1000),
         open: Number(row[1]),
         high: Number(row[2]),
         low: Number(row[3]),

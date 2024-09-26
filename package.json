@@ -9,7 +9,7 @@
     "build": "tsc",
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "csvtosql":"FILE_DIRECTORY='./historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js"
+    "csvtosql": "FILE_DIRECTORY='./historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js"
   },
   "author": "",
   "license": "ISC",

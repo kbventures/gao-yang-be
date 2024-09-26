@@ -1,12 +1,11 @@
 import path from 'path';
 import fs from 'fs';
 import * as fastcsv from 'fast-csv';
-import myTransformStream  from './transformStream.js';
+import myTransformStream from './transformStream.js';
 import { PrismaClient } from '@prisma/client';
-import { OHLCVT, ChunkCount } from '../types/index';
+import { OHLCVT } from '../types/index';
 import { updateGlobalVariables } from './updateGlobalVariables.js';
 import { Decimal } from 'decimal.js';
-
 
 const Prisma = new PrismaClient();
 
@@ -18,9 +17,19 @@ const fileName = process.env.FILE_NAME || '';
 const chunkMax = process.env.CHUNK_MAX || '';
 
 let currentChunks: OHLCVT[] = [];
-let currentChunkCount: number =0;
+let currentChunkCount: number = 0;
 
-// // FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
+const pair = await Prisma.currencyPair.create({
+  data: {
+    id: newCurrencyPair,
+  },
+});
+
+// const check = await Prisma.currencyPair.findMany('XBTCAD')
+// console.log(check)
+// console.log("added", pair)
+
+// ~/Programming/gao-yang-be/dist/utils$ INTERVAL=1 NEWPAIR=XBTCAD FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
 
 const csvLocation = path.join(
   directory || __dirname,
@@ -28,52 +37,44 @@ const csvLocation = path.join(
   fileName
 );
 
-fs.createReadStream(csvLocation)
-  .pipe(fastcsv.parse({ headers: false }))
-  .pipe(myTransformStream((data)=>{
-    const updatedState = updateGlobalVariables(data, currentChunks, currentChunkCount);
-    currentChunks = updatedState.chunks; 
-    currentChunkCount = updatedState.count;
-    console.log(currentChunks,currentChunkCount)
+// fs.createReadStream(csvLocation)
+//   .pipe(fastcsv.parse({ headers: false }))
+//   .pipe(myTransformStream((data)=>{
+//     const updatedState = updateGlobalVariables(data, currentChunks, currentChunkCount);
+//     currentChunks = updatedState.chunks;
+//     currentChunkCount = updatedState.count;
+//     //****************
+//     if(currentChunkCount === 2){
+//       currentChunks.forEach(async e=>{
+//         console.log(e)
+//         const added = await Prisma.oHLCVT1.create({
+//           data:{
+//             timestamp: e.timestamp,
+//             open: new Decimal(e.open),
+//             high: new Decimal(e.high),
+//             low: new Decimal(e.low),
+//             close: new Decimal(e.close),
+//             volume: new Decimal(e.volume),
+//             transactionCount: e.transactionCount,
+//             currencyPairId: newCurrencyPair
+//           }
+//         })
+//         console.log("added", added)
+//       })
+//       currentChunkCount=0;
+//       currentChunks=[];
+//     }
+//   }))
+//   .on('error', (error) => console.error(error))
+//   .on('end', () => {
+//     console.log('Data processed and inserted');
+//     console.log("currentCunks", currentChunks)
+//   });
 
-    //****************
-    if(currentChunkCount === 2){
-      currentChunks.forEach(async e=>{
-        console.log(e)
-        await Prisma.oHLCVT1.create({
-          data:{
-            timestamp: e.timestamp,
-            open: new Decimal(e.open),
-            high: new Decimal(e.high),
-            low: new Decimal(e.low),
-            close: new Decimal(e.close),
-            volume: new Decimal(e.volume),
-            transactionCount: e.transactionCount,
-            currencyPairId:"XBTCAD"
-          }
-        })
-      })
-      currentChunkCount=0;
-      currentChunks=[];
-    } 
-
-    // //***************
-    // currentChunks.forEach(e=>{
-    //   console.log(e)
-    // })
-    // {
-    //   timestamp: 2015-06-30T04:22:00.000Z,
-    //   open: 319.99,
-    //   high: 319.99,
-    //   low: 319.99,
-    //   close: 319.99,
-    //   volume: 0.5,
-    //   transactionCount: 1
-    // }
-  }))
-  .on('error', (error) => console.error(error))
-  .on('end', () => {
-    console.log('Data processed and inserted');
-    console.log("currentCunks", currentChunks)
-  });
-
+// Test
+// Error handling
+// Setup final on end clean up
+// Move all data to database for one minute candle
+// Make data available in database
+// Index and optimised querying
+// Make features available

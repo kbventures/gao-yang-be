@@ -28,7 +28,7 @@ jspm_packages/
 package-lock.json
 
 # Kraken Trading History & OHLCVT
-/historical-data
+/backend/historical-data
 
 #Todo
 todo.txt

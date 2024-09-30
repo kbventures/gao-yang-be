@@ -13,6 +13,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
 model CurrencyPair {
   id         String       @id @unique @default(uuid()) // e.g., "XBTCAD"
   ohlcvt1    OHLCVT1[]

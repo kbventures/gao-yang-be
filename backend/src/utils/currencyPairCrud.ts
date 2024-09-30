@@ -27,3 +27,14 @@ export const deleteCurrencyPair = async (pairId: string) => {
     await prisma.$disconnect();
   }
 };
+
+const command = process.argv[0];
+const id = process.argv[1];
+
+if (command === 'create') {
+  createCurrencyPair(id);
+} else if (command === 'delete') {
+  deleteCurrencyPair(id);
+} else {
+  console.log('Invalid command! Use create or delete');
+}

@@ -9,33 +9,42 @@ import { Decimal } from 'decimal.js';
 
 const Prisma = new PrismaClient();
 
+// Example util usage
+// node server.js XBTUSD 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test.csv
+
 // // Obtain pair name and interval from execution command line
-const newCurrencyPair = process.env.NEWPAIR || '';
-const interval = process.env.INTERVAL || '';
-const directory = process.env.FILE_DIRECTORY || '';
-const fileName = process.env.FILE_NAME || '';
-const chunkMax = process.env.CHUNK_MAX || '';
+const [, , pair, interval, filePath] = process.argv;
+// const chunkMax;
+
+console.log('test', pair, interval, filePath);
 
 let currentChunks: OHLCVT[] = [];
 let currentChunkCount: number = 0;
 
-const pair = await Prisma.currencyPair.create({
-  data: {
-    id: newCurrencyPair,
-  },
-});
+// Create new currency pair
+try {
+  const currencyPair = await Prisma.currencyPair.create({
+    data: {
+      id: pair,
+    },
+  });
+
+  console.log('Currency ', currencyPair, ' added succesfullly!');
+} catch (error) {
+  console.error('An error occured', error);
+}
 
 // const check = await Prisma.currencyPair.findMany('XBTCAD')
 // console.log(check)
 // console.log("added", pair)
 
-// ~/Programming/gao-yang-be/dist/utils$ INTERVAL=1 NEWPAIR=XBTCAD FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
-
-const csvLocation = path.join(
-  directory || __dirname,
-  newCurrencyPair,
-  fileName
-);
+// ~/Programming/gao-yang-be/dist/utils$ NEWPAIR=XBTCAD FILE_DIRECTORY='../../historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js
+// /home/ken/Programming/gao-yang-be/backend/dist/utils/csvFsStreamToSql.js
+// const csvLocation = path.join(
+//   directory || __dirname,
+//   newCurrencyPair,
+//   fileName
+// );
 
 // fs.createReadStream(csvLocation)
 //   .pipe(fastcsv.parse({ headers: false }))

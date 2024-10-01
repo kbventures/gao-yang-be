@@ -1,12 +1,12 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const createCurrencyPair = async (id: string) => {
+export const createCurrencyPair = async (pair: string) => {
   try {
     const currencyPair = await prisma.currencyPair.create({
       data: {
-        id,
+        pair:pair, 
       },
     });
     return currencyPair;

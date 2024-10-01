@@ -1,3 +1,162 @@
+// // This is your Prisma schema file,
+// // learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// // id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+// model CurrencyPair {
+//   id         String       @id @unique @default(uuid())
+//   pair       String
+//   ohlcvt1    OHLCVT1[]
+//   ohlcvt5    OHLCVT5[]
+//   ohlcvt15   OHLCVT15[]
+//   ohlcvt30   OHLCVT30[]
+//   ohlcvt60   OHLCVT60[]
+//   ohlcvt240  OHLCVT240[]
+//   ohlcvt720  OHLCVT720[]
+//   ohlcvt1440 OHLCVT1440[]
+// }
+
+// model OHLCVT1 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
+// // Open High Low Close Volume Transaction Count
+// model OHLCVT5 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
+// model OHLCVT15 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
+// model OHLCVT30 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
+// model OHLCVT60 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
+// model OHLCVT240 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
+// model OHLCVT720 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
+// model OHLCVT1440 {
+//   id               Int      @id @default(autoincrement())
+//   timestamp        DateTime @unique
+//   open             Decimal  @db.Decimal(20, 8)
+//   high             Decimal  @db.Decimal(20, 8)
+//   low              Decimal  @db.Decimal(20, 8)
+//   close            Decimal  @db.Decimal(20, 8)
+//   volume           Decimal  @db.Decimal(20, 8)
+//   transactionCount Int
+//   createdAt        DateTime @default(now())
+//   updatedAt        DateTime @updatedAt
+
+//   currencyPairId String
+//   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
+// }
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -16,7 +175,8 @@ datasource db {
 // id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
 model CurrencyPair {
-  id         String       @id @unique @default(uuid()) // e.g., "XBTCAD"
+  id         String       @id @unique @default(uuid()) @db.Uuid
+  pair       String
   ohlcvt1    OHLCVT1[]
   ohlcvt5    OHLCVT5[]
   ohlcvt15   OHLCVT15[]
@@ -39,7 +199,7 @@ model OHLCVT1 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }
 
@@ -56,7 +216,7 @@ model OHLCVT5 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }
 
@@ -72,7 +232,7 @@ model OHLCVT15 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }
 
@@ -88,7 +248,7 @@ model OHLCVT30 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }
 
@@ -104,7 +264,7 @@ model OHLCVT60 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }
 
@@ -120,7 +280,7 @@ model OHLCVT240 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }
 
@@ -136,7 +296,7 @@ model OHLCVT720 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }
 
@@ -152,6 +312,6 @@ model OHLCVT1440 {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  currencyPairId String
+  currencyPairId String       @db.Uuid
   currencyPair   CurrencyPair @relation(fields: [currencyPairId], references: [id])
 }

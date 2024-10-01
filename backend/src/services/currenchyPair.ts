@@ -27,3 +27,12 @@ export const deleteCurrencyPair = async (pairId: string) => {
     await prisma.$disconnect();
   }
 };
+
+export const getCurrencyPairs = async ()=>{
+  try {
+    const currencyPairs = await prisma.currencyPair.findMany()
+    console.log("Currency pairs: ",currencyPairs)
+  } finally {
+    await prisma.$disconnect();
+  }
+}

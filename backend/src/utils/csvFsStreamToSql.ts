@@ -38,7 +38,6 @@ try {
 // console.log(check)
 // console.log("added", pair)
 
-
 // const csvLocation = path.join(
 //   directory || __dirname,
 //   newCurrencyPair,

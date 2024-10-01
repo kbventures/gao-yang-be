@@ -1,4 +1,4 @@
-import { PrismaClient} from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -13,14 +13,14 @@ export const createCurrencyPair = async (pair: string) => {
   } catch (error) {
     throw error;
   } finally {
-    await prisma.$disconnect;
+    await prisma.$disconnect();
   }
 };
 
-export const deleteCurrencyPair = async (pairId: string) => {
+export const deleteCurrencyPair = async (pair: string) => {
   try {
-    const deletedPair = prisma.currencyPair.delete({
-      where: { id: pairId },
+    const deletedPair = await prisma.currencyPair.delete({
+      where: { pair: pair },
     });
     console.log('Currency pair successfully delete: ', deletedPair);
   } finally {
@@ -28,13 +28,24 @@ export const deleteCurrencyPair = async (pairId: string) => {
   }
 };
 
-const command = process.argv[0];
-const id = process.argv[1];
+export const getCurrencyPairs = async ()=>{
+  try {
+    const currencyPairs = await prisma.currencyPair.findMany()
+    console.log("Currency pairs: ",currencyPairs)
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+const command = process.argv[2];
+const pair = process.argv[3];
+
 
 if (command === 'create') {
-  createCurrencyPair(id);
+  createCurrencyPair(pair);
 } else if (command === 'delete') {
-  deleteCurrencyPair(id);
+  deleteCurrencyPair(pair);
+} else if (command === 'get') {
+  getCurrencyPairs()
 } else {
-  console.log('Invalid command! Use create or delete');
+  console.log('Invalid command! Use create, get or delete');
 }

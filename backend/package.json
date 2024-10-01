@@ -7,7 +7,7 @@
     "start": "node --env-file=.env dist/app.js",
     "dev": "node --env-file=.env --watch --loader ts-node/esm src/app.ts",
     "build": "tsc",
-    "format": "prettier --write 'src/**/.ts'",
+    "format": "prettier --write 'src/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "csvtosql": "FILE_DIRECTORY='./historical-data/Kraken_OHLCVT/XBTCAD/' FILE_NAME='test.csv' node csvFsStreamToSql.js"
   },

@@ -176,7 +176,7 @@ datasource db {
 
 model CurrencyPair {
   id         String       @id @unique @default(uuid()) @db.Uuid
-  pair       String
+  pair       String       @unique
   ohlcvt1    OHLCVT1[]
   ohlcvt5    OHLCVT5[]
   ohlcvt15   OHLCVT15[]

@@ -14,7 +14,7 @@ import { Decimal } from 'decimal.js';
 // node currencyPairCrud.js get
 // Run 
 // node UUID 1 ../../historical-data/Kraken_OHLCVT/test.csv
-// node csvFsStreamToSql.js 5fb6df8b-9200-43c2-828b-f299d24373a8 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test.csv 
+// node csvFsStreamToSql.js 67c3b84e-e87d-4b50-b6c8-a0cafbaaf392 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test.csv 
 const Prisma = new PrismaClient();
 
 const [, , pair, intervalString, filePath] = process.argv;
@@ -57,6 +57,8 @@ fs.createReadStream(filePath)
     currentChunks = updatedState.chunks;
     currentChunkCount = updatedState.count;
 
+    console.log(currentChunks, currentChunkCount)
+
     if (currentChunkCount === 2) {
       for (const e of currentChunks) {
         try {
@@ -81,6 +83,7 @@ fs.createReadStream(filePath)
       currentChunkCount = 0;
       currentChunks = [];
     }
+    console.log(currentChunks)
   }))
   .on('error', (error) => console.error('Stream error:', error))
   .on('end', async () => {

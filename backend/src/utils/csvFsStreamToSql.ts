@@ -7,6 +7,9 @@ import { OHLCVT } from '../types/index';
 import { updateGlobalVariables } from './updateGlobalVariables.js';
 import { Decimal } from 'decimal.js';
 
+// Example usage:
+// node dbc28104-eb26-4081-8be8-f72c8a4054e6 1 ../../historical-data/Kraken_OHLCVT/test.csv
+
 const Prisma = new PrismaClient();
 
 const [, , pair, intervalString, filePath] = process.argv;

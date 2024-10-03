@@ -30,25 +30,43 @@ const intervalMap: PrismaCurrencyOHLCVTNames[] = [
 const command = process.argv[2];
 
 
-export const deleteAll = async () => {
-    const pair = process.argv[3];
-    const intervalString = process.argv[4]  
+export const getAllOHLVCTOfSpecificInterval = async () =>{
+    const pair = process.env[2];
+    const intervalString = process.argv[3]
+    const interval = parseInt(intervalString);
+    const OHLCVTInterval = intervalMap[interval-1]
+
+    try {
+        const getAll = await (prisma[OHLCVTInterval] as any).findMany();
+        console.log("All OHLVCTs of speicific intervals: ", getAll);
+    } finally {
+        await prisma.$disconnect;
+    }
+}
+
+
+export const deletedAllOHLVCTOfSpecificInterval = async () => {
+    const pair = process.argv[2];
+    const intervalString = process.argv[3]  
     const interval = parseInt(intervalString);
     const OHLCVTInterval = intervalMap[interval - 1];
   try {
-    const deletedPair = await (prisma[OHLCVTInterval] as any).delete({
+    const deleted = await (prisma[OHLCVTInterval] as any).delete({
       where: { pair: pair },
     });
-    console.log('Currency pair successfully delete: ', deletedPair);
+    console.log('All OHLVCTs of specific interval pair successfully deleted : ',deleted);
   } finally {
     await prisma.$disconnect();
   }
 };
 
-if (command === 'deleteAll') {
-  deleteAll();
+
+if(command === "getAll"){
+    getAllOHLVCTOfSpecificInterval()
+} else if(command === 'deleteAll') {
+    deletedAllOHLVCTOfSpecificInterval();
 } else {
-  console.log('Invalid command! Use create, get or delete');
+  console.log('Invalid command!');
 }
 
 // node ohlcvtCrud deleteAll XBTCAD 1

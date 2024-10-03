@@ -13,7 +13,7 @@ import { insertChunks } from './insertChunks.js';
 // node currencyPairCrud.js get
 // Run 
 // node UUID 1 ../../historical-data/Kraken_OHLCVT/test.csv
-// node csvFsStreamToSql.js e9570f41-1f74-45f0-aa45-1b9a3218dc5e 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test.csv 
+// node csvFsStreamToSql.js a45234d8-1509-4a12-ad65-54a6bd195017 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test.csv 
 
 const Prisma = new PrismaClient();
 
@@ -33,7 +33,7 @@ fs.createReadStream(filePath)
       currentChunkCount = 0;
       currentChunks = [];
     }
-    console.log(currentChunks)
+    console.log("chunk object content", currentChunks)
   }))
   .on('error', (error) => console.error('Stream error:', error))
   .on('end', async () => {

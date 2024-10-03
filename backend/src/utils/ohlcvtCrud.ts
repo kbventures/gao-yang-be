@@ -3,6 +3,9 @@ import { OHLCVT } from '../types';
 
 const prisma = new PrismaClient();
 
+const [, , command, uuid, intervalString] = process.argv;
+
+
 
 // Define a type for the valid model names in Prisma
 type PrismaCurrencyOHLCVTNames = 
@@ -27,17 +30,16 @@ const intervalMap: PrismaCurrencyOHLCVTNames[] = [
   'oHLCVT1440'
 ];
 
-const command = process.argv[2];
-
 
 export const getAllOHLVCTOfSpecificInterval = async () =>{
-    const pair = process.env[2];
-    const intervalString = process.argv[3]
+    // const pair = process.env[2];
+    // const intervalString = process.argv[3]
     const interval = parseInt(intervalString);
     const OHLCVTInterval = intervalMap[interval-1]
+    console.log("OHLCVTInterval sanitiy check", OHLCVTInterval)
 
     try {
-        const getAll = await (prisma[OHLCVTInterval] as any).findMany();
+        const getAll = await (prisma[OHLCVTInterval] as any).findMany({where: {pair:pair}});
         console.log("All OHLVCTs of speicific intervals: ", getAll);
     } finally {
         await prisma.$disconnect;
@@ -46,13 +48,13 @@ export const getAllOHLVCTOfSpecificInterval = async () =>{
 
 
 export const deletedAllOHLVCTOfSpecificInterval = async () => {
-    const pair = process.argv[2];
-    const intervalString = process.argv[3]  
+    // const pair = process.argv[2];
+    // const intervalString = process.argv[3]  
     const interval = parseInt(intervalString);
     const OHLCVTInterval = intervalMap[interval - 1];
   try {
     const deleted = await (prisma[OHLCVTInterval] as any).delete({
-      where: { pair: pair },
+      where: { id: uuid },
     });
     console.log('All OHLVCTs of specific interval pair successfully deleted : ',deleted);
   } finally {

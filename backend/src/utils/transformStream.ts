@@ -28,6 +28,5 @@ function myTransformStream(updateGlobalVariables: (data: OHLCVT) => void) {
 
 export default myTransformStream;
 
-
-// First you need to transform the data and add 
+// First you need to transform the data and add
 // its reference to an object

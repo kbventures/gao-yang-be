@@ -3,70 +3,66 @@ import { OHLCVT } from '../types';
 import { getCurrencyPairs } from './currencyPairCrud';
 
 const prisma = new PrismaClient();
-
-const [, , command, id, intervalString] = process.argv;
-
-
+const [, , command, intervalString, uuid] = process.argv;
 
 // Define a type for the valid model names in Prisma
-type PrismaCurrencyOHLCVTNames = 
-  | 'oHLCVT1' 
-  | 'oHLCVT5' 
-  | 'oHLCVT15' 
-  | 'oHLCVT30' 
-  | 'oHLCVT60' 
-  | 'oHLCVT240' 
-  | 'oHLCVT720' 
+type PrismaCurrencyOHLCVTNames =
+  | 'oHLCVT1'
+  | 'oHLCVT5'
+  | 'oHLCVT15'
+  | 'oHLCVT30'
+  | 'oHLCVT60'
+  | 'oHLCVT240'
+  | 'oHLCVT720'
   | 'oHLCVT1440';
 
 // Map the interval numbers to Prisma model names
 const intervalMap: PrismaCurrencyOHLCVTNames[] = [
-  'oHLCVT1', 
-  'oHLCVT5', 
-  'oHLCVT15', 
-  'oHLCVT30', 
-  'oHLCVT60', 
-  'oHLCVT240', 
-  'oHLCVT720', 
-  'oHLCVT1440'
+  'oHLCVT1',
+  'oHLCVT5',
+  'oHLCVT15',
+  'oHLCVT30',
+  'oHLCVT60',
+  'oHLCVT240',
+  'oHLCVT720',
+  'oHLCVT1440',
 ];
 
-export const getAllOHLVCTOfSpecificInterval = async (uuid:string) =>{
-    // const pair = process.env[2];
-    // const intervalString = process.argv[3]
-    const interval = parseInt(intervalString);
-    const OHLCVTInterval = intervalMap[interval-1]
-    console.log("OHLCVTInterval sanitiy check", OHLCVTInterval)
+// node ohlcvtCrud.js getAll 1 b3831caf-b869-4f58-ad79-3d1e14c6a977
+export const getAllOHLVCTOfSpecificInterval = async (uuid: string) => {
+  const interval = parseInt(intervalString);
+  const OHLCVTInterval = intervalMap[interval - 1];
 
-    try {
-        const getAll = await (prisma[OHLCVTInterval] as any).findMany({where: {currencyPairId:uuid}});
-        console.log("All OHLVCTs of speicific intervals: ", getAll);
-    } finally {
-        await prisma.$disconnect;
-    }
-}
+  try {
+    const getAll = await (prisma[OHLCVTInterval] as any).findMany({
+      where: { currencyPairId: uuid },
+    });
+    console.log('All OHLVCTs of speicific intervals: ', getAll);
+  } finally {
+    await prisma.$disconnect;
+  }
+};
 
-
+// node ohlcvtCrud.js deleteAll 1
 export const deletedAllOHLVCTOfSpecificInterval = async () => {
-    // const pair = process.argv[2];
-    // const intervalString = process.argv[3]  
-    const interval = parseInt(intervalString);
-    const OHLCVTInterval = intervalMap[interval - 1];
+  const intervalString = process.argv[3];
+  const interval = parseInt(intervalString);
+  const OHLCVTInterval = intervalMap[interval - 1];
   try {
     const deleted = await (prisma[OHLCVTInterval] as any).deleteMany({});
-    console.log('All OHLVCTs of specific interval pair successfully deleted : ',deleted);
+    console.log(
+      'All OHLVCTs of specific interval pair successfully deleted : ',
+      deleted
+    );
   } finally {
     await prisma.$disconnect();
   }
 };
 
-
-if(command === "getAll"){
-    getAllOHLVCTOfSpecificInterval(id)
-} else if(command === 'deleteAll') {
-    deletedAllOHLVCTOfSpecificInterval();
+if (command === 'getAll') {
+  getAllOHLVCTOfSpecificInterval(uuid);
+} else if (command === 'deleteAll') {
+  deletedAllOHLVCTOfSpecificInterval();
 } else {
   console.log('Invalid command!');
 }
-
-// node ohlcvtCrud deleteAll XBTCAD 1

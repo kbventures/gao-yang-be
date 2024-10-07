@@ -10,11 +10,11 @@ import { OHLCVT } from '../types/index';
 // Example usage:
 // Create Pair
 // Currency pairs:  [ { id: '2f75149f-0ff3-4c4d-8b18-504a07c3ab0a', pair: 'XBTCAD' } ]
-// Get 
+// Get
 // node currencyPairCrud.js get
-// Run 
+// Run
 // node UUID 1 ../../historical-data/Kraken_OHLCVT/test0.csv
-// node csvFsStreamToSql.js b3831caf-b869-4f58-ad79-3d1e14c6a977 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test1.csv 
+// node csvFsStreamToSql.js b3831caf-b869-4f58-ad79-3d1e14c6a977 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test1.csv
 
 const Prisma = new PrismaClient();
 
@@ -25,93 +25,89 @@ let currentChunkCount: number = 0;
 
 fs.createReadStream(filePath)
   .pipe(fastcsv.parse({ headers: false }))
-  .pipe(myTransformStream(async (data) => {
-    const updatedState = updateGlobalVariables(data, currentChunks, currentChunkCount);
-    currentChunks = updatedState.chunks;
-    currentChunkCount = updatedState.count;
-      
-    console.log("chunk object content", currentChunks, currentChunkCount)
+  .pipe(
+    myTransformStream(async (data) => {
+      const updatedState = updateGlobalVariables(
+        data,
+        currentChunks,
+        currentChunkCount
+      );
+      currentChunks = updatedState.chunks;
+      currentChunkCount = updatedState.count;
 
-    if (currentChunkCount === 1) {
-      await insertChunks(currentChunks, pair, intervalString)
-      currentChunkCount = 0;
-      currentChunks = [];
-    }
-  
-    console.log("chunk object content", currentChunks, currentChunkCount)
-  }))
+      console.log('chunk object content', currentChunks, currentChunkCount);
+
+      if (currentChunkCount === 1) {
+        await insertChunks(currentChunks, pair, intervalString);
+        currentChunkCount = 0;
+        currentChunks = [];
+      }
+
+      console.log('chunk object content', currentChunks, currentChunkCount);
+    })
+  )
   .on('error', (error) => console.error('Stream error:', error))
   .on('end', async () => {
-    console.log("Sanity check")
-    if(currentChunks.length > 0){
-      insertChunks(currentChunks, pair, intervalString)
+    console.log('Sanity check');
+    if (currentChunks.length > 0) {
+      insertChunks(currentChunks, pair, intervalString);
     }
     Prisma.$disconnect();
   });
 
-
-
-
-
-
-
 import { Decimal } from 'decimal.js';
 
-
-
 // Define a type for the valid model names in Prisma
-type PrismaCurrencyOHLCVTNames = 
-  | 'oHLCVT1' 
-  | 'oHLCVT5' 
-  | 'oHLCVT15' 
-  | 'oHLCVT30' 
-  | 'oHLCVT60' 
-  | 'oHLCVT240' 
-  | 'oHLCVT720' 
+type PrismaCurrencyOHLCVTNames =
+  | 'oHLCVT1'
+  | 'oHLCVT5'
+  | 'oHLCVT15'
+  | 'oHLCVT30'
+  | 'oHLCVT60'
+  | 'oHLCVT240'
+  | 'oHLCVT720'
   | 'oHLCVT1440';
 
 // Map the interval numbers to Prisma model names
 const intervalMap: PrismaCurrencyOHLCVTNames[] = [
-  'oHLCVT1', 
-  'oHLCVT5', 
-  'oHLCVT15', 
-  'oHLCVT30', 
-  'oHLCVT60', 
-  'oHLCVT240', 
-  'oHLCVT720', 
-  'oHLCVT1440'
+  'oHLCVT1',
+  'oHLCVT5',
+  'oHLCVT15',
+  'oHLCVT30',
+  'oHLCVT60',
+  'oHLCVT240',
+  'oHLCVT720',
+  'oHLCVT1440',
 ];
 
+async function insertChunks(c: OHLCVT[], pair: string, intervalString: string) {
+  console.log('insertChunk Sanity Check!');
+  const interval = parseInt(intervalString);
+  // Access the correct model based on the interval
+  const OHLCVTInterval = intervalMap[interval - 1];
 
-async function insertChunks(c:OHLCVT[], pair: string, intervalString: string){
-    console.log("insertChunk Sanity Check!")
-    const interval = parseInt(intervalString);
-    // Access the correct model based on the interval
-    const OHLCVTInterval = intervalMap[interval - 1];
-
-    for (const e of c) {
-      try {
-        const added = await (Prisma[OHLCVTInterval] as any).create({
-          data: {
-            timestamp: e.timestamp,
-            open: new Decimal(e.open),
-            high: new Decimal(e.high),
-            low: new Decimal(e.low),
-            close: new Decimal(e.close),
-            volume: new Decimal(e.volume),
-            transactionCount: e.transactionCount,
-            currencyPairId: pair
-          }
-        });
-        console.log('Entry added:', added);
-      } catch (error) {
-        console.error('Error adding entry:', error);
-      }
+  for (const e of c) {
+    try {
+      const added = await (Prisma[OHLCVTInterval] as any).create({
+        data: {
+          timestamp: e.timestamp,
+          open: new Decimal(e.open),
+          high: new Decimal(e.high),
+          low: new Decimal(e.low),
+          close: new Decimal(e.close),
+          volume: new Decimal(e.volume),
+          transactionCount: e.transactionCount,
+          currencyPairId: pair,
+        },
+      });
+      console.log('Entry added:', added);
+    } catch (error) {
+      console.error('Error adding entry:', error);
     }
   }
+}
 
-
-  import { Transform } from 'stream';
+import { Transform } from 'stream';
 
 function myTransformStream(updateGlobalVariables: (data: OHLCVT) => void) {
   const newTransform = new Transform({
@@ -138,7 +134,6 @@ function myTransformStream(updateGlobalVariables: (data: OHLCVT) => void) {
   return newTransform;
 }
 
-
 export function updateGlobalVariables(
   data: OHLCVT,
   currentChunks: OHLCVT[],
@@ -148,6 +143,3 @@ export function updateGlobalVariables(
   const updatedCount = currentChunkCount + 1;
   return { chunks: updatedchunks, count: updatedCount };
 }
-
-
-

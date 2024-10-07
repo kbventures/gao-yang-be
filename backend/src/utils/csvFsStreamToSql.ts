@@ -13,8 +13,8 @@ import { OHLCVT } from '../types/index';
 // Get 
 // node currencyPairCrud.js get
 // Run 
-// node UUID 1 ../../historical-data/Kraken_OHLCVT/test.csv
-// node csvFsStreamToSql.js a45234d8-1509-4a12-ad65-54a6bd195017 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test.csv 
+// node UUID 1 ../../historical-data/Kraken_OHLCVT/test0.csv
+// node csvFsStreamToSql.js b3831caf-b869-4f58-ad79-3d1e14c6a977 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test1.csv 
 
 const Prisma = new PrismaClient();
 
@@ -29,12 +29,16 @@ fs.createReadStream(filePath)
     const updatedState = updateGlobalVariables(data, currentChunks, currentChunkCount);
     currentChunks = updatedState.chunks;
     currentChunkCount = updatedState.count;
-    if (currentChunkCount === 2) {
-      insertChunks(currentChunks, pair, intervalString)
+      
+    console.log("chunk object content", currentChunks, currentChunkCount)
+
+    if (currentChunkCount === 1) {
+      await insertChunks(currentChunks, pair, intervalString)
       currentChunkCount = 0;
       currentChunks = [];
     }
-    console.log("chunk object content", currentChunks)
+  
+    console.log("chunk object content", currentChunks, currentChunkCount)
   }))
   .on('error', (error) => console.error('Stream error:', error))
   .on('end', async () => {

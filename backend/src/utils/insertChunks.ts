@@ -35,9 +35,10 @@ export async function insertChunks(
   // Access the correct model based on the interval
   const OHLCVTInterval = intervalMap[interval - 1];
 
+  const addedData = [];
   for (const e of c) {
     try {
-      const added = await (Prisma[OHLCVTInterval] as any).create({
+      const added = (Prisma[OHLCVTInterval] as any).create({
         data: {
           timestamp: e.timestamp,
           open: new Decimal(e.open),
@@ -49,9 +50,12 @@ export async function insertChunks(
           currencyPairId: pair,
         },
       });
-      console.log('Entry added:', added);
+      addedData.push(added);
+      console.log('Entry added:', addedData);
     } catch (error) {
       console.error('Error adding entry:', error);
     }
   }
+  await Promise.all(addedData);
+  console.log('addedData', addedData);
 }

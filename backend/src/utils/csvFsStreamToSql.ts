@@ -14,7 +14,9 @@ import { myTransformStream } from './transformStream.js';
 // node currencyPairCrud.js get
 // Run
 // node UUID 1 ../../historical-data/Kraken_OHLCVT/test0.csv
-// node csvFsStreamToSql.js b3831caf-b869-4f58-ad79-3d1e14c6a977 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test1.csv
+// node csvFsStreamToSql.js e5769b1e-d032-4408-b348-e71b9ff1de7d 1 ../../historical-data/Kraken_OHLCVT/XBTCAD/test1.csv
+
+// node csvFsStreamToSql.js e5769b1e-d032-4408-b348-e71b9ff1de7d 1440 ../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv
 
 const Prisma = new PrismaClient();
 
@@ -23,10 +25,12 @@ const [, , pair, intervalString, filePath] = process.argv;
 let currentChunks: OHLCVT[] = [];
 let currentChunkCount: number = 0;
 
-fs.createReadStream(filePath)
+const stream = fs
+  .createReadStream(filePath)
   .pipe(fastcsv.parse({ headers: false }))
   .pipe(
     myTransformStream(async (data) => {
+      console.log('Received data:', data); // Log received data
       const updatedState = updateGlobalVariables(
         data,
         currentChunks,
@@ -34,18 +38,29 @@ fs.createReadStream(filePath)
       );
       currentChunks = updatedState.chunks;
       currentChunkCount = updatedState.count;
-      if (currentChunkCount === 2) {
-        await insertChunks(currentChunks, pair, intervalString);
-        currentChunkCount = 0;
-        currentChunks = [];
+      if (currentChunkCount == 3) {
+        // this.pause()
+        try {
+          stream.pause();
+          await insertChunks(currentChunks, pair, intervalString);
+          currentChunkCount = 0;
+          currentChunks = [];
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            console.error('Error occured at chunk', currentChunks, error);
+          } else {
+            throw new Error('Uknown Error Occurred');
+          }
+        }
       }
+      stream.resume();
     })
   )
   .on('error', (error) => console.error('Stream error:', error))
   .on('end', async () => {
-    console.log('Sanity check');
+    console.log('On end triggered?!?!');
     if (currentChunks.length > 0) {
-      insertChunks(currentChunks, pair, intervalString);
+      await insertChunks(currentChunks, pair, intervalString);
     }
     Prisma.$disconnect();
   });

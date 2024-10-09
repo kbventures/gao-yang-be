@@ -28,7 +28,7 @@ const intervalMap: PrismaCurrencyOHLCVTNames[] = [
   'oHLCVT1440',
 ];
 
-// node ohlcvtCrud.js getAll 1 b3831caf-b869-4f58-ad79-3d1e14c6a977
+// node ohlcvtCrud.js getAll 1
 export const getAllOHLVCTOfSpecificInterval = async (uuid: string) => {
   const interval = parseInt(intervalString);
   const OHLCVTInterval = intervalMap[interval - 1];

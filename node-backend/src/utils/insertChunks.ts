@@ -51,11 +51,9 @@ export async function insertChunks(
         },
       });
       addedData.push(added);
-      console.log('Entry added:', addedData);
     } catch (error) {
       console.error('Error adding entry:', error);
     }
   }
   await Promise.all(addedData);
-  console.log('addedData', addedData);
 }

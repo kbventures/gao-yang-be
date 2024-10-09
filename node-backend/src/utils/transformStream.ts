@@ -1,8 +1,6 @@
 import { Transform } from 'stream';
 import { OHLCVT } from '../types';
-
-// type NextFunction = (error?:Error)=>void;
-
+1;
 export function myTransformStream(
   updateGlobalVariables: (data: OHLCVT) => void
 ) {

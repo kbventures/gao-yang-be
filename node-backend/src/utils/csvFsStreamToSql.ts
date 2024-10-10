@@ -24,7 +24,7 @@ const [, , pair, intervalString, filePath, CHUNK_SIZE] = process.argv;
 
 let currentChunks: OHLCVT[] = [];
 let currentChunkCount: number = 0;
-let totalCount: number = 0; 
+let totalCount: number = 0;
 
 const stream = fs
   .createReadStream(filePath)
@@ -72,11 +72,10 @@ const stream = fs
         }
       }
     }
-    console.log("Total count: ", totalCount);
+    console.log('Total count: ', totalCount);
     Prisma.$disconnect();
   });
 
-
-  // Problem:
-  // I am able to add any files to the 1 minute chart no matter there time frame
-  // 
+// Problem:
+// I am able to add any files to the 1 minute chart no matter there time frame
+//

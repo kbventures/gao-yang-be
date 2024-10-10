@@ -10,10 +10,8 @@ interface KrakenOHLVCVTResponse {
   error: string[];
 }
 
-const [, , pair, interval, since] = process.argv;
-
 // node krakenApiFetch.js XBTCAD 1440 1711843200
-const getOHLCVTData = async function (
+const getKrakenOHLCVTData = async function (
   pair: string,
   interval: string,
   since: string
@@ -28,6 +26,7 @@ const getOHLCVTData = async function (
     }
     const data = (await response.json()) as KrakenOHLVCVTResponse;
     console.dir(data.result.XXBTZCAD, { depth: null });
+    return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(
@@ -42,10 +41,8 @@ const getOHLCVTData = async function (
   }
 };
 
-if(require.main === module){
-  const [,,pair,interval,since]= process.argv;
-  getOHLCVTData(pair,interval,since);
-}
+const [, , pair, interval, since] = process.argv;
+getKrakenOHLCVTData(pair, interval, since);
 
 // Equivalen Curl Command:
 

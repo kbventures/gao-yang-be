@@ -1,5 +1,26 @@
 import fetch from 'node-fetch';
-import { KrakenResponse, TickDataArray } from '../types';
+import { KrakenResponse, TickDataArray } from '../../types/index.js';
+
+// https://docs.kraken.com/api/docs/rest-api/get-ohlc-data
+
+// Equivalen Curl Command:
+
+// curl -X GET "https://api.kraken.com/0/public/OHLC?pair=XBTCAD&interval=1440&since=1711843200" \
+//      -H "Content-Type: application/json"
+
+// Array of tick data arrays [int <time>, string <open>, string <high>, string <low>, string <close>, string <vwap>, string <volume>, int <count>]
+// [
+//   1720483200,
+//   '77373.9',
+//   '79392.4',
+//   '76722.1',
+//   '79122.3',
+//   '78396.1',
+//   '15.07409206',
+//   1152
+// ],
+// ... 98 more items
+// ]
 
 // const pair = "XBTCAD";
 // const interval = 1440;
@@ -51,8 +72,3 @@ const getKrakenOHLCVVTData = async function (
 
 const [, , pair, interval, since] = process.argv;
 getKrakenOHLCVVTData(pair, interval, since);
-
-// Equivalen Curl Command:
-
-// curl -X GET "https://api.kraken.com/0/public/OHLC?pair=XBTCAD&interval=1440&since=1711843200" \
-//      -H "Content-Type: application/json"

@@ -1,31 +1,32 @@
 import fs from 'fs';
 import { getKrakenOHLCVVTData } from './krakenGetOhlc.js';
-import { OHLCVTStrings, TickDataArray } from '../types/index.js';
+import { TickDataArray } from '../../types/index.js';
 
 const [, , pair, interval, since]: string[] = process.argv;
 
 // node krakenObjectToCsvUtil XBTCAD 1440 1711843200
-const ohlcvtUpdate: TickDataArray[] | undefined = await getKrakenOHLCVVTData(
+const ohlcvtData: TickDataArray[] | undefined = await getKrakenOHLCVVTData(
   pair,
   interval,
   since
 );
 
-if (ohlcvtUpdate === undefined) {
+if (ohlcvtData === undefined) {
   throw new Error('Failed to fetch data or no data returned');
 }
 
+// Already done in previous module
 // Map the array data to OHLCVT objects
-const ohlcvtData: OHLCVTStrings[] = ohlcvtUpdate.map((arr) => [
-  String(arr[0]),
-  arr[1],
-  arr[2],
-  arr[3],
-  arr[4],
-  // Skipping vwaps
-  arr[6],
-  String(arr[7]),
-]);
+// const ohlcvtData: OHLCVTStrings[] = ohlcvtUpdate.map((arr) => [
+//   String(arr[0]),
+//   arr[1],
+//   arr[2],
+//   arr[3],
+//   arr[4],
+//   // Skipping vwaps
+//   arr[6],
+//   String(arr[7]),
+// ]);
 
 console.log(ohlcvtData);
 

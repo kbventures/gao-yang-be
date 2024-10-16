@@ -15,26 +15,6 @@ if (ohlcvtUpdate === undefined) {
   throw new Error('Failed to fetch data or no data returned');
 }
 
-// console.log(ohlcvtUpdate)
-
-// if (ohlcvtUpdate && ohlcvtUpdate.result && ohlcvtUpdate.result.XBTCAD) {
-//   console.dir(ohlcvtUpdate.result.XXBTZCAD, { depth: null });
-// } else if (ohlcvtUpdate == undefined) {
-//   throw new Error('Failed to fetch data or no data returned');
-// }
-
-// [
-//   1720483200,
-//   '77373.9',
-//   '79392.4',
-//   '76722.1',
-//   '79122.3',
-//   '78396.1', Volume Weighted Average Price not needed
-//   '15.07409206',
-//   1152
-// ],
-// ... 93 more items
-// ]
 // Map the array data to OHLCVT objects
 const ohlcvtData: OHLCVTStrings[] = ohlcvtUpdate.map((arr) => [
   String(arr[0]),
@@ -42,23 +22,35 @@ const ohlcvtData: OHLCVTStrings[] = ohlcvtUpdate.map((arr) => [
   arr[2],
   arr[3],
   arr[4],
-  arr[6], // Ensure you're accessing the correct index (was arr[6])
-  String(arr[7]), // Assuming this is the transaction count
+  // Skipping vwaps
+  arr[6],
+  String(arr[7]),
 ]);
 
 console.log(ohlcvtData);
 
-// // Generate the CSV content
-// const csvContent = ohlcvtData.map(row =>
-//   `${row.timestamp},${row.open},${row.high},${row.low},${row.close},${row.volume},${row.vwap},${row.count}`
-// ).join('\n');
+// Generate the CSV content
+const csvContent = ohlcvtData
+  .map(
+    (row) =>
+      `${row[0]},${row[1]},${row[2]},${row[3]},${row[4]},${row[5]},${row[6]}`
+  )
+  .join('\n');
 
-// try{
-// fs.writeFileSync(`${pair}_${interval}.csv`, csvContent)
-// } catch(err:unknown){
-//     if(err instanceof Error){
-//         console.error("Error writing to file: ", err, err.message, err.name, err.stack)
-//     } else {
-//         throw new Error("Unknown error while writing to file: ")
-//     }
-// }
+try {
+  fs.writeFileSync(`${pair}_${interval}.csv`, csvContent);
+} catch (err: unknown) {
+  if (err instanceof Error) {
+    console.error(
+      'Error writing to file: ',
+      err,
+      err.message,
+      err.name,
+      err.stack
+    );
+  } else {
+    throw new Error('Unknown error while writing to file: ');
+  }
+}
+
+// Next step is sync the data on start

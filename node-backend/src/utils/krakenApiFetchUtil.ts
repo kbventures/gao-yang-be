@@ -1,17 +1,12 @@
 import fetch from 'node-fetch';
-import { OHLCVT } from '../types';
+import { KrakenResponse, TickDataArray } from '../types';
 
 // const pair = "XBTCAD";
 // const interval = 1440;
 // const since = 1711843200
 
-interface KrakenOHLVCVTResponse {
-  result: Record<string, OHLCVT[]>;
-  error: string[];
-}
-
 // node krakenApiFetch.js XBTCAD 1440 1711843200
-const getKrakenOHLCVTData = async function (
+const getKrakenOHLCVVTData = async function (
   pair: string,
   interval: string,
   since: string
@@ -24,9 +19,22 @@ const getKrakenOHLCVTData = async function (
     if (!response.ok) {
       throw new Error('network response was not ok: ' + response.statusText);
     }
-    const data = (await response.json()) as KrakenOHLVCVTResponse;
-    console.dir(data.result.XXBTZCAD, { depth: null });
-    return data;
+    const data = (await response.json()) as KrakenResponse;
+
+    const tickDataArray: TickDataArray[] = data.result.XXBTZCAD.map((item) => [
+      Number(item[0]), // Timestamp
+      item[1], // Open price
+      item[2], // High price
+      item[3], // Low price
+      item[4], // Close price
+      item[5], // VWAP price
+      item[6], // Volume
+      Number(item[7]), // Transaction count
+    ]);
+
+    console.log(tickDataArray);
+    return tickDataArray;
+    // return data;
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(
@@ -42,7 +50,7 @@ const getKrakenOHLCVTData = async function (
 };
 
 const [, , pair, interval, since] = process.argv;
-getKrakenOHLCVTData(pair, interval, since);
+getKrakenOHLCVVTData(pair, interval, since);
 
 // Equivalen Curl Command:
 

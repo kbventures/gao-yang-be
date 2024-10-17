@@ -1,8 +1,7 @@
-import path from 'path';
 import fs from 'fs';
 import * as fastcsv from 'fast-csv';
 import { PrismaClient } from '@prisma/client';
-import { OHLCVT } from '../types/index';
+import { OHLCVT } from '../../types/index';
 import { updateGlobalVariables } from './updateGlobalVariables.js';
 import { insertChunks } from './insertChunks.js';
 import { myTransformStream } from './transformStream.js';

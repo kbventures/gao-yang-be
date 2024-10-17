@@ -1,4 +1,4 @@
-import { OHLCVT } from '../types';
+import { OHLCVT } from '../../types';
 
 export function updateGlobalVariables(
   data: OHLCVT,

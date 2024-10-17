@@ -1,5 +1,5 @@
 import { Transform } from 'stream';
-import { OHLCVT } from '../types';
+import { OHLCVT } from '../../types';
 1;
 export function myTransformStream(
   updateGlobalVariables: (data: OHLCVT) => void

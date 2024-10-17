@@ -1,4 +1,4 @@
-import { OHLCVT } from '../types/index';
+import { OHLCVT } from '../../types/index';
 import { PrismaClient } from '@prisma/client';
 import { Decimal } from 'decimal.js';
 const Prisma = new PrismaClient();

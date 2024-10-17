@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 // Steps
-// 1 node obtainLastRowCsvUtil.js XBTCAD 1440 /home/ken/Programming/gao-yang-be/node-backend/historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv
+// 1 node obtainLastRowCsvUtil.js /home/ken/Programming/gao-yang-be/node-backend/historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv
 // 2 obtain process values
 // 3 immediately invoked function expression calls readLastRow
 // 4 obtain file stats
@@ -12,11 +12,10 @@ import fs from 'fs/promises';
 // 10 Convert chunk to string
 
 // 2 Obtain process.argv values
-const [, , pair, interval, filePath]: string[] = process.argv;
+const [, , filePath]: string[] = process.argv;
 
 export default async function readLastLine(
   filePath: string
-  // linesToRead: number = 2
 ): Promise<string[]> {
   try {
     // 4. Obtain file stats
@@ -25,7 +24,6 @@ export default async function readLastLine(
     const bufferSize = 128;
 
     // 5. Create Buffer
-    // Buffer.alloc(size[, fill[, encoding]])
     const buffer = Buffer.alloc(bufferSize);
 
     // 6. Obtain start point
@@ -51,6 +49,7 @@ export default async function readLastLine(
     // Chunks of data read 6199,1560
     // 1711756800,94795.0,95348.2,94689.2,94950.0,19.4054122,1388
     // 1711843200,94915.8,96636.9,94890.3,96526.9,18.15392732,1241
+    // /n not showing but included
 
     // 10 Split the chunk into lines and prepend to the result
     lines = chunk.split('\n').concat(lines);
@@ -61,7 +60,7 @@ export default async function readLastLine(
     // 12 Return the lasts index(ie:line)
     return lines.slice(-1);
   } catch (err) {
-    throw err; 
+    throw err;
   }
 }
 
@@ -70,16 +69,9 @@ export default async function readLastLine(
   try {
     const lastLines = await readLastLine(filePath);
 
-    // Last lines: [
-    //   '1711756800,94795.0,95348.2,94689.2,94950.0,19.4054122,1388',
-    //   '1711843200,94915.8,96636.9,94890.3,96526.9,18.15392732,1241'
-    // ]
+    // Last lines: [ '1711843200,94915.8,96636.9,94890.3,96526.9,18.15392732,1241' ]
     console.log('Last lines:', lastLines);
   } catch (error) {
     console.error('Error reading last lines:', error);
   }
 })();
-
-// Todo
-// Finish sync csv and sql
-// Work on front end to obtain

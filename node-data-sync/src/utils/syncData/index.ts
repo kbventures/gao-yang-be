@@ -1,8 +1,8 @@
-// import obtainLastRowCsv from './obtainLastRowCsvUtil.js';
+import obtainLastRowCsv from './obtainLastRowCsvUtil.js';
+
+const [, , pair, interval, filePath] = process.argv;
 
 // This utility will orchestrate the use of utilities and or services required to sync the historical data to csv and sql
-
-export {};
 
 // 1 obtain last csv entry from pair interval you wish to update
 // 2 utilise this entry timestamp to obtain history through api call necessary to update the history

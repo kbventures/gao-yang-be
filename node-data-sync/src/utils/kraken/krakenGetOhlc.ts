@@ -10,13 +10,11 @@ export const getKrakenOHLCVVTData = async function (
 
   try {
     const response = await fetch(url);
-    console.log(response);
 
     if (!response.ok) {
       throw new Error('network response was not ok: ' + response.statusText);
     }
     const data = (await response.json()) as KrakenResponse;
-    console.dir(data.result.XXBTZCAD, { depth: null });
 
     const tickDataArray: TickDataArray[] = data.result.XXBTZCAD.map((item) => [
       Number(item[0]), // Timestamp

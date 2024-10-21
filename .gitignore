@@ -29,7 +29,7 @@ package-lock.json
 
 # Kraken Trading History & OHLCVT
 /backend/historical-data
-/node-backend/historical-data
+/node-data-sync/historical-data
 
 #Todo
 todo.txt

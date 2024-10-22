@@ -6,18 +6,16 @@ import { updateGlobalVariables } from './updateGlobalVariables.js';
 import { insertChunks } from './insertChunks.js';
 import { myTransformStream } from './transformStream.js';
 
-// Example usage:
-// Create Pair
-// Currency pairs:  [ { id: '2f75149f-0ff3-4c4d-8b18-504a07c3ab0a', pair: 'XBTCAD' } ]
-// Get
-// node currencyPairCrud.js get
-// Run
-// node UUID 1 ../../historical-data/Kraken_OHLCVT/test0.csv
-// node csvFsStreamToSql.js 4bfc93a1-8be2-4edd-a20f-f8e6671c87b9 1440 ../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv 1000
-
-// node csvFsStreamToSql.js 1112b698-1a1f-48fb-8584-3664eb267dc4 8 ../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv 1000
-
 const Prisma = new PrismaClient();
+
+/**
+ * Main function to process CSV data and insert it into PostgreSQL.
+ *
+ * @param {string} pair - The currency pair identifier.
+ * @param {string} intervalString - The time interval for data.
+ * @param {string} filePath - The path to the CSV file.
+ * @param {number} CHUNK_SIZE - The size of data chunks to be processed.
+ */
 
 const [, , pair, intervalString, filePath, CHUNK_SIZE] = process.argv;
 
@@ -75,6 +73,14 @@ const stream = fs
     Prisma.$disconnect();
   });
 
-// Problem:
-// I am able to add any files to the 1 minute chart no matter there time frame
-//
+// Example usage:
+// Create Pair
+// Currency pairs:  [ { id: 'c4ce487f-53b7-4bd9-b398-3438847dddd4', pair: 'XBTCAD' } ]
+// node currencyPairCrud.js get
+// Run
+// node UUID 1 ../../historical-data/Kraken_OHLCVT/test0.csv
+// node csvFsStreamToSql.js c4ce487f-53b7-4bd9-b398-3438847dddd4 1440 ../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv 1000
+
+// node csvFsStreamToSql.js 1112b698-1a1f-48fb-8584-3664eb267dc4 8 ../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv 1000
+
+// node csvFsStreamToSql.js c4ce487f-53b7-4bd9-b398-3438847dddd4 1440 ../../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv 1000

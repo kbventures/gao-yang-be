@@ -1,6 +1,7 @@
 import { OHLCVT } from '../../types/index';
 import { PrismaClient } from '@prisma/client';
 import { Decimal } from 'decimal.js';
+
 const Prisma = new PrismaClient();
 
 // Define a type for the valid model names in Prisma
@@ -26,6 +27,17 @@ const intervalMap: PrismaCurrencyOHLCVTNames[] = [
   'oHLCVT1440',
 ];
 
+/**
+ * Inserts an array of OHLCVT data into the corresponding Prisma model.
+ *
+ * @param {OHLCVT[]} c - An array of OHLCVT data objects to be inserted.
+ * @param {string} pair - The currency pair UUID associated with the data.
+ * @param {string} intervalString - The interval string representing the data interval (e.g., "0" for 1 minutes... "7" for 1440minutes).
+ *
+ * @returns {Promise<void>} A promise that resolves when all data has been inserted.
+ *
+ * @throws {Error} Will log errors to the console if an entry fails to be added.
+ */
 export async function insertChunks(
   c: OHLCVT[],
   pair: string,
@@ -33,7 +45,7 @@ export async function insertChunks(
 ) {
   const interval = parseInt(intervalString);
   // Access the correct model based on the interval
-  const OHLCVTInterval = intervalMap[interval - 1];
+  const OHLCVTInterval = intervalMap[interval];
 
   const addedData = [];
   for (const e of c) {

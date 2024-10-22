@@ -34,3 +34,14 @@ export type TickDataArray = [
   string, // Volume
   number, // Transaction count (as an integer)
 ];
+
+// Define a type for the valid model names in Prisma
+export type CurrencyOHLCVTNames =
+  | 'oHLCVT1'
+  | 'oHLCVT5'
+  | 'oHLCVT15'
+  | 'oHLCVT30'
+  | 'oHLCVT60'
+  | 'oHLCVT240'
+  | 'oHLCVT720'
+  | 'oHLCVT1440';

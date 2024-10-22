@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import { OHLCVT } from '../types';
-import { getCurrencyPairs } from './currencyPairCrud';
+import { getCurrencyPairs } from './currencyPairCrudUtil';
 
 const prisma = new PrismaClient();
 const [, , command, intervalString, uuid] = process.argv;

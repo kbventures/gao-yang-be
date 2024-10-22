@@ -50,7 +50,7 @@ export async function insertChunks(
   const addedData = [];
   for (const e of c) {
     try {
-      const added = (Prisma[OHLCVTInterval] as any).create({
+      const added = await (Prisma[OHLCVTInterval] as any).create({
         data: {
           timestamp: e.timestamp,
           open: new Decimal(e.open),
@@ -67,5 +67,4 @@ export async function insertChunks(
       console.error('Error adding entry:', error);
     }
   }
-  await Promise.all(addedData);
 }

@@ -35,8 +35,6 @@ export default async function readLastLine(filePath: string): Promise<string> {
     // 7. Split the chunk into lines
     const lines = chunk.split('\n');
 
-    console.log(lines[lines.length - 1]);
-
     // Get the last line (if it exists)
     const lastLine = lines[lines.length - 1] || '';
 

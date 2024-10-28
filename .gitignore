@@ -33,3 +33,8 @@ package-lock.json
 
 #Todo
 todo.txt
+
+fast-api-demo/
+fast-api-be/
+nextjs-dashboard/
+nextjs-fe/

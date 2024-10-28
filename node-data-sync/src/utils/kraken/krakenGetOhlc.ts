@@ -1,6 +1,9 @@
 import fetch from 'node-fetch';
 import { KrakenResponse, TickDataArray } from '../../types/index.js';
 
+// When using the Kraken OHLC (Open, High, Low, Close) API, the since parameter is exclusive.
+// This means that if you specify a timestamp for a particular date, the data returned will not include that date but will start from the next available timestamp.
+
 export const getKrakenOHLCVVTData = async function (
   pair: string,
   interval: string,

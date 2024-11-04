@@ -45,3 +45,8 @@ export type CurrencyOHLCVTNames =
   | 'oHLCVT240'
   | 'oHLCVT720'
   | 'oHLCVT1440';
+
+
+// Define a generic type for the interval to index mapping
+export type IntervalToIndexMap<I extends number, T extends number> = Record<I, T>;
+

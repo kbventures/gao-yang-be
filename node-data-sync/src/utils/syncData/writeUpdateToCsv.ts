@@ -13,7 +13,7 @@ export default async function writeUpdateToCsv(
     if (err instanceof Error) {
       console.log('Error appending data to CSV:', err.message); // Start with the message
       console.log('Error name:', err.name);
-      console.log(err.stack); 
+      console.log(err.stack);
     } else {
       throw Error(`Error appending data to CSV: ${err}`);
     }

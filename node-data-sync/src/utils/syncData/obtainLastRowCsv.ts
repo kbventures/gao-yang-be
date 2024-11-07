@@ -9,6 +9,7 @@ import fs from 'fs/promises';
 // 6. Convert chunk to string
 // 7. Split the chunk into lines and return the last line
 // 8. Close file descriptor
+// 9. Return last line
 
 export default async function readLastLine(filePath: string): Promise<string> {
   try {
@@ -36,12 +37,15 @@ export default async function readLastLine(filePath: string): Promise<string> {
     const lines = chunk.split('\n');
 
     // Get the last line (if it exists)
-    const lastLine = lines[lines.length - 1] || '';
+    if (lines.length === 0) {
+      throw new Error('The array is empty, unable to fetch the last line.');
+    }
+    const lastLine = lines[lines.length - 1];
 
     // 8. Close the file descriptor
     await fd.close();
 
-    // Return the last line as a string
+    // 9. Return the last line as a string
     return lastLine;
   } catch (err) {
     throw err;

@@ -9,9 +9,6 @@ const [, , pair, interval, filePath] = process.argv;
 
 // node orchestrateSyncUtil.js XBTCAD 1440 ../../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv
 
-// CREATE UTILITY TO TEST THE DATA BEFORE APPENDING NEW DATA?
-
-// Catch Errors
 try {
   // Obtain last line from csv file we wish to sync
   const lastLineOfCsv = await obtainLastRowCsv(filePath);
@@ -29,10 +26,23 @@ try {
   // Append data to CSV  && SQL
   // Check if Kraken_OHLCVT_data is defined and has entries and
   if (Kraken_OHLCVT_data && Kraken_OHLCVT_data.length > 0) {
+    // testing
+    // console.log('last line of csv, ', lastLineOfCsv);
+    // console.log('timestamp of extracted last line, ', lastLineOfCsv);
+    // console.log(
+    //   'date of the first timestamp retrived, ',
+    //   new Date(Kraken_OHLCVT_data[0][0] * 1000)
+    // );
+    // console.log(
+    //   'date of the last timestamp retrived, ',
+    //   new Date(Kraken_OHLCVT_data[Kraken_OHLCVT_data.length - 1][0] * 1000)
+    // );
+    // console.log('getLast sqlOhlcvt data: ', sqlOhlcvt);
+
     await writeUpdateToCsv(Kraken_OHLCVT_data, filePath);
-    await writeUpdateToSql(Kraken_OHLCVT_data, pair, interval);
+    // await writeUpdateToSql(Kraken_OHLCVT_data, pair, interval);
   }
-  console.log(Kraken_OHLCVT_data);
+  // console.log(Kraken_OHLCVT_data);
 } catch (err) {
   if (err instanceof Error) {
     console.log(err.message);

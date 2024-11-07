@@ -30,6 +30,7 @@ export const getKrakenOHLCVVTData = async function (
       Number(item[7]), // Transaction count
     ]);
 
+    console.log;
     return tickDataArray;
     // return data;
   } catch (error: unknown) {

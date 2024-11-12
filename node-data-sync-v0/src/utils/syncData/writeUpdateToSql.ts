@@ -53,33 +53,34 @@ export default async function writeUpdateToSql(
   const uuid = pairToUuid[pair];
 
   const addedData = [];
-
-  for (const e of tickerArray) {
-    try {
-      const added = await (Prisma[OHLCVTIntervalString] as any).create({
-        data: {
-          timestamp: new Date(e[0]),
-          open: new Decimal(e[1]),
-          high: new Decimal(e[2]),
-          low: new Decimal(e[3]),
-          close: new Decimal(e[4]),
-          volume: new Decimal(e[5]),
-          transactionCount: e[6],
-          currencyPairId: uuid,
-        },
-      });
-      addedData.push(added);
-    } catch (err) {
-      if (err instanceof Error) {
-        console.log('Error adding data to SQL: ', err.message);
-        console.log('Error name: ', err.name);
-        console.log(err.stack);
-      } else {
-        throw Error(`Error insterting data to SQL: ${err}`);
-      }
+  // console.log(tickerArray);
+  try {
+    for (const e of tickerArray) {
+      // const added = await (Prisma[OHLCVTIntervalString] as any).create({
+      //   data: {
+      //     timestamp: new Date(e[0]),
+      //     open: new Decimal(e[1]),
+      //     high: new Decimal(e[2]),
+      //     low: new Decimal(e[3]),
+      //     close: new Decimal(e[4]),
+      //     volume: new Decimal(e[5]),
+      //     transactionCount: e[6],
+      //     currencyPairId: uuid,
+      //   },
+      // });
+      // addedData.push(added);
+      // console.log(e[0], e[1], e[2], e[3], e[4], e[5], e[7]);
+    }
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log('Error adding data to SQL: ', err.message);
+      console.log('Error name: ', err.name);
+      console.log(err.stack);
+    } else {
+      throw Error(`Error insterting data to SQL: ${err}`);
     }
   }
-  console.log(addedData.length);
+  // console.log(addedData.length);
   Prisma.$disconnect();
 }
 

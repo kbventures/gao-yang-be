@@ -25,11 +25,10 @@ try {
 
   // Append data to CSV  && SQL
   // Check if Kraken_OHLCVT_data is defined and has entries and
-  if (Kraken_OHLCVT_data && Kraken_OHLCVT_data.length > 0) {
+  if (Kraken_OHLCVT_data && Kraken_OHLCVT_data.length > 0 && sqlOhlcvt) {
     await writeUpdateToCsv(Kraken_OHLCVT_data, filePath);
     await writeUpdateToSql(Kraken_OHLCVT_data, pair, interval);
   }
-  // console.log(Kraken_OHLCVT_data);
 } catch (err) {
   if (err instanceof Error) {
     console.log(err.message);

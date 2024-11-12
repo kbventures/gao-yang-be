@@ -1,8 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { CurrencyOHLCVTNames } from '../types';
 
-// internal number string to OHLCVTName
-
 const intervalToIndex: Record<number, number> = {
   1: 0,
   5: 1,
@@ -15,7 +13,7 @@ const intervalToIndex: Record<number, number> = {
 };
 
 const pairToUuid: Record<string, string> = {
-  XBTCAD: 'ab03281f-ed58-422f-97a8-9741a1d9c700',
+  XBTCAD: '85708488-766a-4a43-9088-62e2c809260c',
 };
 
 // Map the interval numbers to Prisma model names

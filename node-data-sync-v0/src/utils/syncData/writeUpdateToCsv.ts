@@ -13,7 +13,6 @@ export default async function writeUpdateToCsv(
   // const dataToAppend = `\n${rows}`;
   try {
     await fs.appendFile(filePath, rows);
-    console.log('row length, ', rows.length);
   } catch (err) {
     if (err instanceof Error) {
       console.log('Error appending data to CSV:', err.message); // Start with the message

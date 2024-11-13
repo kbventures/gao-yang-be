@@ -7,7 +7,7 @@ import writeUpdateToSql from './writeUpdateToSql.js';
 
 const [, , pair, interval, filePath] = process.argv;
 
-// node orchestrateSyncUtil.js XBTCAD 1440 ../../../historical-data/Kraken_OHLCVT/XBTCAD/XBTCAD_1440.csv
+// node orchestrateSyncUtil.js XBTCAD 1440 ../../../historical-data/Kraken_OHLCVT/XBTCAD_1440.csv
 
 try {
   // Obtain last line from csv file we wish to sync

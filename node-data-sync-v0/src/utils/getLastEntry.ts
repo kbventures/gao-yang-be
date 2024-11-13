@@ -13,7 +13,7 @@ const intervalToIndex: Record<number, number> = {
 };
 
 const pairToUuid: Record<string, string> = {
-  XBTCAD: '85708488-766a-4a43-9088-62e2c809260c',
+  XBTCAD: '14c331a5-e0f2-4585-b0aa-4558fb10873a',
 };
 
 // Map the interval numbers to Prisma model names

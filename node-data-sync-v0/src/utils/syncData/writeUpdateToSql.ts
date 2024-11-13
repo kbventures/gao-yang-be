@@ -20,7 +20,7 @@ const intervalToIndex: IntervalToIndexMap<number, number> = {
 };
 
 const pairToUuid: Record<string, string> = {
-  XBTCAD: 'ab03281f-ed58-422f-97a8-9741a1d9c700',
+  XBTCAD: '14c331a5-e0f2-4585-b0aa-4558fb10873a',
 };
 
 const intervalMap: CurrencyOHLCVTNames[] = [
@@ -56,20 +56,19 @@ export default async function writeUpdateToSql(
   // console.log(tickerArray);
   try {
     for (const e of tickerArray) {
-      // const added = await (Prisma[OHLCVTIntervalString] as any).create({
-      //   data: {
-      //     timestamp: new Date(e[0]),
-      //     open: new Decimal(e[1]),
-      //     high: new Decimal(e[2]),
-      //     low: new Decimal(e[3]),
-      //     close: new Decimal(e[4]),
-      //     volume: new Decimal(e[5]),
-      //     transactionCount: e[6],
-      //     currencyPairId: uuid,
-      //   },
-      // });
-      // addedData.push(added);
-      // console.log(e[0], e[1], e[2], e[3], e[4], e[5], e[7]);
+      const added = await (Prisma[OHLCVTIntervalString] as any).create({
+        data: {
+          timestamp: new Date(e[0] * 1000),
+          open: new Decimal(e[1]),
+          high: new Decimal(e[2]),
+          low: new Decimal(e[3]),
+          close: new Decimal(e[4]),
+          volume: new Decimal(e[6]),
+          transactionCount: e[7],
+          currencyPairId: uuid,
+        },
+      });
+      addedData.push(added);
     }
   } catch (err) {
     if (err instanceof Error) {
@@ -83,5 +82,3 @@ export default async function writeUpdateToSql(
   // console.log(addedData.length);
   Prisma.$disconnect();
 }
-
-// original has 3144 entries in both the csv and sql database

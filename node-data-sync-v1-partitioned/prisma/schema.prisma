@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model OHLCVT {
+  id               Int      @id @default(autoincrement())
+  timestamp        DateTime
+  open             Decimal  @db.Decimal(20, 8)
+  high             Decimal  @db.Decimal(20, 8)
+  low              Decimal  @db.Decimal(20, 8)
+  close            Decimal  @db.Decimal(20, 8)
+  volume           Decimal  @db.Decimal(20, 8)
+  transactionCount Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  currencyPair String
+  interval     Int
+
+  @@unique([timestamp, currencyPair, interval])
+}

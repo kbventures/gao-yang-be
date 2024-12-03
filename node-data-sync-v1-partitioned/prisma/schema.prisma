@@ -7,20 +7,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model OHLCVT {
-  id               Int      @id @default(autoincrement())
-  timestamp        DateTime
-  open             Decimal  @db.Decimal(20, 8)
-  high             Decimal  @db.Decimal(20, 8)
-  low              Decimal  @db.Decimal(20, 8)
-  close            Decimal  @db.Decimal(20, 8)
-  volume           Decimal  @db.Decimal(20, 8)
-  transactionCount Int
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model ohlcvt {
+  id               Int       @default(autoincrement())
+  timestamp        DateTime  @db.Timestamptz(6)
+  open             Decimal?  @db.Decimal(20, 8)
+  high             Decimal?  @db.Decimal(20, 8)
+  low              Decimal?  @db.Decimal(20, 8)
+  close            Decimal?  @db.Decimal(20, 8)
+  volume           Decimal?  @db.Decimal(20, 8)
+  transactioncount Int?
+  createdat        DateTime? @default(now()) @db.Timestamp(6)
+  updatedat        DateTime? @default(now()) @db.Timestamp(6)
+  source           String    @db.VarChar(20)
+  source_type      String?   @db.VarChar(20)
+  currencypair     String    @db.VarChar(10)
+  interval         Int
 
-  currencyPair String
-  interval     Int
+  @@id([id, timestamp, source, currencypair, interval])
+}
 
-  @@unique([timestamp, currencyPair, interval])
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model ohlcvt_kraken {
+  id               Int       @default(autoincrement())
+  timestamp        DateTime  @db.Timestamptz(6)
+  open             Decimal?  @db.Decimal(20, 8)
+  high             Decimal?  @db.Decimal(20, 8)
+  low              Decimal?  @db.Decimal(20, 8)
+  close            Decimal?  @db.Decimal(20, 8)
+  volume           Decimal?  @db.Decimal(20, 8)
+  transactioncount Int?
+  createdat        DateTime? @default(now()) @db.Timestamp(6)
+  updatedat        DateTime? @default(now()) @db.Timestamp(6)
+  source           String    @db.VarChar(20)
+  source_type      String?   @db.VarChar(20)
+  currencypair     String    @db.VarChar(10)
+  interval         Int
+
+  @@id([id, timestamp, source, currencypair, interval])
+}
+
+/// This table is a partition table and requires additional setup for migrations. Visit https://pris.ly/d/partition-tables for more info.
+model ohlcvt_kraken_xbt_cad {
+  id               Int       @default(autoincrement())
+  timestamp        DateTime  @db.Timestamptz(6)
+  open             Decimal?  @db.Decimal(20, 8)
+  high             Decimal?  @db.Decimal(20, 8)
+  low              Decimal?  @db.Decimal(20, 8)
+  close            Decimal?  @db.Decimal(20, 8)
+  volume           Decimal?  @db.Decimal(20, 8)
+  transactioncount Int?
+  createdat        DateTime? @default(now()) @db.Timestamp(6)
+  updatedat        DateTime? @default(now()) @db.Timestamp(6)
+  source           String    @db.VarChar(20)
+  source_type      String?   @db.VarChar(20)
+  currencypair     String    @db.VarChar(10)
+  interval         Int
+
+  @@id([id, timestamp, source, currencypair, interval])
+  @@index([interval], map: "idx_kraken_xbt_cad_interval")
+  @@index([source, currencypair], map: "idx_kraken_xbt_cad_source_currencypair")
+  @@index([timestamp], map: "idx_kraken_xbt_cad_timestamp")
 }

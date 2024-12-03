@@ -107,3 +107,4 @@ CREATE INDEX idx_kraken_xbt_cad_timestamp ON ohlcvt_kraken_xbt_cad (timestamp);
 CREATE INDEX idx_kraken_xbt_cad_source_currencyPair ON ohlcvt_kraken_xbt_cad (source, currencyPair);
 
 
+-- npx db pull

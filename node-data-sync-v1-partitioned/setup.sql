@@ -1,28 +1,33 @@
--- -1 Orchestrate project before running setup.sql file
--- // Orchestrate docker compose file
+-- -Orchestrate project before running setup.sql file
+-- 1 Orchestrate docker compose file
 -- docker compose up -d
 
--- // COPY setup.sql in container
+-- 2 COPY setup.sql in container
 -- // Example: 
 -- // docker cp /home/ken/Programming/gao-yang-be/node-data-sync-v1-partitioned/setup.sql <container_name_or_id>:/tmp/setup.sql
 -- docker cp /home/ken/Programming/gao-yang-be/node-data-sync-v1-partitioned/setup.sql node-data-sync-v1-partitioned-postgres-1:/tmp/setup.sql
 
--- // Start bash ter2minal inside container
+-- 3 Start bash ter2minal inside container
 -- docker exec -it CONTAINERNAME bash
 
--- // Create env variables in bash
+-- 4 Create env variables in bash
 -- export POSTGRES_USER=gao_yang
 -- export POSTGRES_DB=gao_yang_db
 
--- // Connect to db utilising user name and db from the exported env varibles
+-- 5 Connect to db utilising user name and db from the exported env varibles
 -- psql -U $POSTGRES_USER -d $POSTGRES_DB
 
+-- 6
 -- \i /tmp/setup.sql
 
 
--- Step: 0: Clean previosu tables, partitions, and index if they exist
+-- Step: 7: Clean previosu tables, partitions, and index if they exist
 
 -- Drop partitions (if they exists )
+
+
+-- Step 0: Drop the main table if it exists
+DROP TABLE IF EXISTS ohlcvt CASCADE;
 
 DO $$
 
